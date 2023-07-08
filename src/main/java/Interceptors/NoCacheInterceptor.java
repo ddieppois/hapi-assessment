@@ -10,7 +10,7 @@ public class NoCacheInterceptor implements IClientInterceptor {
 
     @Override
     public void interceptRequest(IHttpRequest iHttpRequest) {
-        System.out.println("Turning Off caching for this request\n");
+        System.out.println("Turning Off caching for this request");
         iHttpRequest.addHeader("Cache-Control", "no-cache");
     }
 

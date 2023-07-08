@@ -30,6 +30,19 @@ public class SampleClient {
         IGenericClient client = fhirContext.newRestfulGenericClient("http://hapi.fhir.org/baseR4");
         client.registerInterceptor(new LoggingInterceptor(false));
 
+        //Start set of tasks
+        basicTasks(client);
+        intermediateTasks(client);
+
+    }
+
+    /**
+     * This method process the basic tasks for the FHIR assessment
+     *
+     * @param client
+     * @return
+     */
+    private static void basicTasks(IGenericClient client) {
         //Basic tasks output
         System.out.println("\n*********** Basic Tasks Start ***********");
         List<Patient> patients = extractPatientListFromBundle(bundleSearch("SMITH", client));
@@ -48,18 +61,27 @@ public class SampleClient {
         for (PatientResponse patientInfo : patientInfoList) {
             System.out.println(patientInfo);
         }
+    }
 
+    /**
+     * This method process the intermediate tasks for the FHIR assessment
+     *
+     * @param client
+     * @return
+     */
+    private static void intermediateTasks(IGenericClient client) {
         //Intermediate tasks output
         try {
             System.out.println("\n*********** Intermediate Tasks Start ***********");
             ResponseTimeInterceptor responseTimeInterceptor = new ResponseTimeInterceptor();
             client.registerInterceptor(responseTimeInterceptor);
+            List<String> nameList = readLastNamesFromFile(FILE_PATH);
             for (int i = 0; i < SEARCH_LOOP; i++) {
                 if (i == 2) {
                     client.registerInterceptor(new NoCacheInterceptor());
                 }
                 //Retrieving names from file and performing a search for each
-                readLastNamesFromFile(FILE_PATH).forEach(lastName -> {
+                nameList.forEach(lastName -> {
                     System.out.println("Searching for last name: " + lastName);
                     bundleSearch(lastName, client);
                 });
@@ -70,7 +92,6 @@ public class SampleClient {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-
     }
 
     /**

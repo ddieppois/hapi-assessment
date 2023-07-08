@@ -36,7 +36,7 @@ public class ResponseTimeInterceptor implements IClientInterceptor {
         double averageResponseTime = (double) totalResponseTime / responseTimes.size();
 
         // Print the average response time for all requests so far
-        System.out.println("Average Response Time for " + responseTimes.size() + " requests: " + averageResponseTime + "ms");
+        System.out.println("Average Response Time for " + responseTimes.size() + " requests: " + averageResponseTime + "ms\n");
     }
 
     public void resetResponseTimes() {
